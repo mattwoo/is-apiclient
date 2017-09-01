@@ -52,7 +52,7 @@ class ApiClient
         return $this->handleResponse(ResponseFactory::getInstance(get_class($request), $code, $responseContent));
     }
 
-    private function handleResponse(AbstractResponse $response)
+    private function handleResponse(AbstractResponse $response): AbstractResponse
     {
         if (!$response->isSuccessful()) {
             $decoded = json_decode($response->getRawContent(), true);

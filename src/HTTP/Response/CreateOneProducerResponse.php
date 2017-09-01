@@ -16,6 +16,6 @@ class CreateOneProducerResponse extends AbstractResponse
     {
         $decoded = json_decode($this->content, true);
 
-        return Producer::createByArray($decoded['producer']);
+        return Producer::createByArray($decoded['data']['producer']);
     }
 }

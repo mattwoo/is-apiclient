@@ -37,7 +37,7 @@ class Producer
     private $sourceId;
 
     public function __construct(
-        int $id,
+        ?int $id,
         string $name,
         ?string $siteUrl,
         string $logoFilename,
@@ -54,12 +54,13 @@ class Producer
 
     public static function createByArray(array $p): Producer
     {
+
         return new self(
             $p['id'], $p['name'], $p['site_url'], $p['logo_filename'], $p['ordering'], $p['source_id']
         );
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

@@ -25,17 +25,11 @@ class HttpHeader
         $this->value = $value;
     }
 
-    /**
-     * @return string
-     */
     public function getKey(): string
     {
         return $this->key;
     }
 
-    /**
-     * @return string
-     */
     public function getValue(): string
     {
         return $this->value;
