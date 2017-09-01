@@ -16,7 +16,7 @@ $ php vendor/bin/phpunit -c phpunit.xml.dist
 
 ### Usage
 
-#####GetAllProducers
+GetAllProducers
 
 ```php
 use Mattwoo\IsystemsClient\ApiClient;
@@ -28,7 +28,6 @@ use Mattwoo\IsystemsClient\HTTP\Request\RequestException;
 $client = new ApiClient();
 
 try {
-    /** @var GetAllProducersResponse $response */
     $response = $client->sendRequest(new GetAllProducersRequest(new UserCredentials('rest', 'vKTUeyrt')));
     print_r($response->getProducers());
 } catch (RequestException $e) {
@@ -36,7 +35,7 @@ try {
 }
 ```
 
-#####CreateOneProducer
+CreateOneProducer
 
 ```php
 use Mattwoo\IsystemsClient\ApiClient;
@@ -52,7 +51,6 @@ $apiClient = new ApiClient();
 $producer = new Producer(null, 'name', 'site.url', 'logo.png', 1, time());
 $req = new CreateOneProducerRequest($credentials, $producer);
 try {
-    /** @var CreateOneProducerResponse $resp */
     $resp = $apiClient->sendRequest($req);
     print_r($resp->getProducer());
 } catch (RequestException $e) {
