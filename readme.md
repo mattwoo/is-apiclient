@@ -28,7 +28,7 @@ use Mattwoo\IsystemsClient\HTTP\Request\RequestException;
 $client = new ApiClient();
 
 try {
-    $response = $client->sendRequest(new GetAllProducersRequest(new UserCredentials('rest', 'vKTUeyrt')));
+    $response = $client->sendRequest(new GetAllProducersRequest(new UserCredentials('username', 'password')));
     print_r($response->getProducers());
 } catch (RequestException $e) {
     echo $e->getMessage();
@@ -45,7 +45,7 @@ use Mattwoo\IsystemsClient\HTTP\Response\DTO\Producer;
 use Mattwoo\IsystemsClient\HTTP\Request\RequestException;
 use Mattwoo\IsystemsClient\HTTP\Response\CreateOneProducerResponse;
 
-$credentials = new UserCredentials('rest', 'vKTUeyrt');
+$credentials = new UserCredentials('username', 'password');
 $apiClient = new ApiClient();
 
 $producer = new Producer(null, 'name', 'site.url', 'logo.png', 1, time());

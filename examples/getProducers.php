@@ -11,7 +11,7 @@ $client = new ApiClient();
 
 try {
     /** @var GetAllProducersResponse $response */
-    $response = $client->sendRequest(new GetAllProducersRequest(new UserCredentials('rest', 'vKTUeyrt')));
+    $response = $client->sendRequest(new GetAllProducersRequest(new UserCredentials('username', 'password')));
     print_r($response->getProducers());
 } catch (RequestException $e) {
     echo $e->getMessage();
