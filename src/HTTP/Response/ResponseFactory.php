@@ -10,17 +10,19 @@ namespace Mattwoo\IsystemsClient\HTTP\Response;
 
 use Mattwoo\IsystemsClient\HTTP\Request\CreateOneProducerRequest;
 use Mattwoo\IsystemsClient\HTTP\Request\GetAllProducersRequest;
+use Mattwoo\IsystemsClient\HTTP\Request\RequestInterface;
 
 abstract class ResponseFactory
 {
 
     private static $responseMap = [
         GetAllProducersRequest::class => GetAllProducersResponse::class,
-        CreateOneProducerRequest::class => CreateOneProducerResponse::class
+        CreateOneProducerRequest::class => CreateOneProducerResponse::class,
     ];
 
-    public static function getInstance(string $requestClassName, int $statusCode, string $content): AbstractResponse
+    public static function getInstance(RequestInterface $request, int $statusCode, string $content): AbstractResponse
     {
+        $requestClassName = get_class($request);
         if (!isset(self::$responseMap[$requestClassName])) {
             throw new \InvalidArgumentException(
                 sprintf('Request class %s was not configured in %s', $requestClassName, __CLASS__)

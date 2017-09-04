@@ -8,30 +8,20 @@
 
 namespace Mattwoo\IsystemsClient\HTTP\Request;
 
-use Mattwoo\IsystemsClient\HTTP\HttpHeader;
 use Mattwoo\IsystemsClient\HTTP\Response\DTO\Producer;
 
-class CreateOneProducerRequest implements RequestInterface, AuthenticatedRequestInterface
+class CreateOneProducerRequest extends ProducersRequest
 {
 
-    /**
-     * @var UserCredentials
-     */
-    private $credentials;
     /**
      * @var Producer
      */
     private $producer;
 
-    public function __construct(UserCredentials $credentials, Producer $producer)
+    public function __construct(Producer $producer, string $url)
     {
-        $this->credentials = $credentials;
+        parent::__construct($url);
         $this->producer = $producer;
-    }
-
-    public function getCredentials(): UserCredentials
-    {
-        return $this->credentials;
     }
 
     public function getMethod(): string
@@ -39,29 +29,10 @@ class CreateOneProducerRequest implements RequestInterface, AuthenticatedRequest
         return RequestInterface::METHOD_POST;
     }
 
-    public function getUrl(): string
-    {
-        return 'http://grzegorz.demos.i-sklep.pl/rest_api/shop_api/v1/producers';
-    }
-
-    public function getHeaders(): array
+    public function getContent(): array
     {
         return [
-            new HttpHeader('Accept-Language', 'pl-PL')
-        ];
-    }
-
-    public function serializeContent(): array
-    {
-        return [
-            'producer' => [
-                'id' => $this->producer->getId(),
-                'name' => $this->producer->getName(),
-                'site_url' => $this->producer->getSiteUrl(),
-                'logo_filename' => $this->producer->getLogoFilename(),
-                'ordering' => $this->producer->getOrdering(),
-                'source_id' => $this->producer->getSourceId(),
-            ],
+            'producer' => $this->producer->jsonSerialize(),
         ];
     }
 }

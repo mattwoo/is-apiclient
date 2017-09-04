@@ -1,22 +1,23 @@
 <?php
 require_once __DIR__.'/../vendor/autoload.php';
 
-use Mattwoo\IsystemsClient\ApiClient;
-use Mattwoo\IsystemsClient\HTTP\Request\CreateOneProducerRequest;
+use Mattwoo\IsystemsClient\HTTP\Auth\BasicAuth;
 use Mattwoo\IsystemsClient\HTTP\Request\UserCredentials;
+use Mattwoo\IsystemsClient\HTTP\Request\CreateOneProducerRequest;
 use Mattwoo\IsystemsClient\HTTP\Response\DTO\Producer;
-use Mattwoo\IsystemsClient\HTTP\Request\RequestException;
-use Mattwoo\IsystemsClient\HTTP\Response\CreateOneProducerResponse;
+use Mattwoo\IsystemsClient\ApiClient;
 
-$credentials = new UserCredentials('username', 'password');
-$apiClient = new ApiClient();
+$credentials = new UserCredentials('rest', 'vKTUeyrt');
+$basicAuth = new BasicAuth($credentials);
 
+$url = 'http://grzegorz.demos.i-sklep.pl/rest_api/shop_api/v1/producers';
 $producer = new Producer(null, 'name', 'site.url', 'logo.png', 1, time());
-$req = new CreateOneProducerRequest($credentials, $producer);
+
+$request = new CreateOneProducerRequest($producer, $url);
+$apiClient = new ApiClient($request, $basicAuth);
 try {
-    /** @var CreateOneProducerResponse $resp */
-    $resp = $apiClient->sendRequest($req);
-    print_r($resp->getProducer());
-} catch (RequestException $e) {
+    $resp = $apiClient->sendRequest();
+    print_r($resp);
+} catch (\Exception $e) {
     echo $e->getMessage();
 }

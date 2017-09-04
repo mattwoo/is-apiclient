@@ -8,8 +8,8 @@
 
 namespace Mattwoo\IsystemsClient;
 
-use Mattwoo\IsystemsClient\HTTP\HttpHeader;
-use Mattwoo\IsystemsClient\HTTP\Request\AuthenticatedRequestInterface;
+use Mattwoo\IsystemsClient\HTTP\Auth\AuthorizationInterface;
+use Mattwoo\IsystemsClient\HTTP\CurlRequest;
 use Mattwoo\IsystemsClient\HTTP\Request\RequestException;
 use Mattwoo\IsystemsClient\HTTP\Request\RequestInterface;
 use Mattwoo\IsystemsClient\HTTP\Response\AbstractResponse;
@@ -18,42 +18,28 @@ use Mattwoo\IsystemsClient\HTTP\Response\ResponseFactory;
 class ApiClient
 {
 
-    private $curl;
+    /**
+     * @var CurlRequest
+     */
+    private $curlRequest;
+    /**
+     * @var RequestInterface
+     */
+    private $request;
 
-    public function __construct()
+    public function __construct(RequestInterface $request, ?AuthorizationInterface $authorization = null)
     {
-        $this->curl = curl_init();
-        curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($this->curl, CURLOPT_FOLLOWLOCATION, 1);
-        curl_setopt($this->curl, CURLOPT_HEADER, 0);
+        $this->request = $request;
+        $this->curlRequest = CurlRequest::createFromRequestObject($request);
+        if (null !== $authorization) {
+            $authorization->authorize($this->curlRequest);
+        }
     }
 
-    public function sendRequest(RequestInterface $request): AbstractResponse
+    public function sendRequest(): AbstractResponse
     {
-        curl_setopt($this->curl, CURLOPT_URL, $request->getUrl());
-
-        $isPostRequest = $request->getMethod() === RequestInterface::METHOD_POST;
-        curl_setopt($this->curl, CURLOPT_POST, $isPostRequest);
-        if ($isPostRequest) {
-            $content = json_encode($request->serializeContent());
-            curl_setopt($this->curl, CURLOPT_POSTFIELDS, $content);
-        }
-
-        if ($request instanceof AuthenticatedRequestInterface) {
-            curl_setopt($this->curl, CURLOPT_USERPWD, $request->getCredentials()->asCurlString());
-        }
-
-        $this->setHeaders($request->getHeaders());
-
-        $responseContent = curl_exec($this->curl);
-        $code = curl_getinfo($this->curl, CURLINFO_HTTP_CODE);
-        curl_close($this->curl);
-
-        return $this->handleResponse(ResponseFactory::getInstance(get_class($request), $code, $responseContent));
-    }
-
-    private function handleResponse(AbstractResponse $response): AbstractResponse
-    {
+        $result = $this->curlRequest->send();
+        $response = ResponseFactory::getInstance($this->request, $result->getStatusCode(), $result->getContent());
         if (!$response->isSuccessful()) {
             $decoded = json_decode($response->getRawContent(), true);
             $errorMsg = $response->getRawContent();
@@ -64,15 +50,5 @@ class ApiClient
         }
 
         return $response;
-    }
-
-    private function setHeaders(array $headers): void
-    {
-        $hdrs = [];
-        /** @var HttpHeader $header */
-        foreach ($headers as $header) {
-            $hdrs[] = $header->asCurlHeaderString();
-        }
-        curl_setopt($this->curl, CURLOPT_HTTPHEADER, $hdrs);
     }
 }

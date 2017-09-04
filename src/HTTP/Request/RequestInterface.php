@@ -20,5 +20,5 @@ interface RequestInterface
 
     public function getHeaders(): array;
 
-    public function serializeContent(): array;
+    public function getContent(): array;
 }

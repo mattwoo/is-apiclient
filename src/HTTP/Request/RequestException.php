@@ -12,6 +12,7 @@ class RequestException extends \Exception
 {
     public function __construct(int $statusCode, string $content)
     {
-        parent::__construct(sprintf('Got http code %d with message "%s"', $statusCode, $content));
+        $message = sprintf('Got http code %d with message "%s"', $statusCode, $content);
+        parent::__construct($message);
     }
 }

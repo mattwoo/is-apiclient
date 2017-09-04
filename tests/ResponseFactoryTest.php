@@ -16,17 +16,11 @@ use PHPUnit\Framework\TestCase;
 class ResponseFactoryTest extends TestCase
 {
 
-    public function testThrowsExceptionOnUnregisteredRequestClass()
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        ResponseFactory::getInstance('missingclass', 0, 'content');
-    }
-
     public function testReturnsCorrectResponseObject()
     {
         $respContent = 'Respcontent';
         /** @var GetAllProducersResponse $res */
-        $res = ResponseFactory::getInstance(GetAllProducersRequest::class, 200, $respContent);
+        $res = ResponseFactory::getInstance(new GetAllProducersRequest('asd'), 200, $respContent);
 
         $this->assertInstanceOf(GetAllProducersResponse::class, $res);
         $this->assertTrue($res->isSuccessful());
