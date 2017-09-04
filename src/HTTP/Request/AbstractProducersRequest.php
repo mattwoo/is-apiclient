@@ -10,7 +10,7 @@ namespace Mattwoo\IsystemsClient\HTTP\Request;
 
 use Mattwoo\IsystemsClient\HTTP\HttpHeader;
 
-abstract class ProducersRequest implements RequestInterface
+abstract class AbstractProducersRequest implements RequestInterface
 {
 
     /**

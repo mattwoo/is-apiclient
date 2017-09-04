@@ -8,7 +8,7 @@
 
 namespace Mattwoo\IsystemsClient\HTTP\Request;
 
-class GetAllProducersRequest extends ProducersRequest
+class GetAllProducersRequest extends AbstractProducersRequest
 {
 
     public function getMethod(): string

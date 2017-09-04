@@ -10,7 +10,7 @@ namespace Mattwoo\IsystemsClient\HTTP\Request;
 
 use Mattwoo\IsystemsClient\HTTP\Response\DTO\Producer;
 
-class CreateOneProducerRequest extends ProducersRequest
+class CreateOneProducerRequest extends AbstractProducersRequest
 {
 
     /**
