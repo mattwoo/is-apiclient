@@ -7,7 +7,7 @@ use Mattwoo\IsystemsClient\HTTP\Request\CreateOneProducerRequest;
 use Mattwoo\IsystemsClient\HTTP\Response\DTO\Producer;
 use Mattwoo\IsystemsClient\ApiClient;
 
-$credentials = new UserCredentials('rest', 'vKTUeyrt');
+$credentials = new UserCredentials('username', 'password');
 $basicAuth = new BasicAuth($credentials);
 
 $url = 'http://grzegorz.demos.i-sklep.pl/rest_api/shop_api/v1/producers';
